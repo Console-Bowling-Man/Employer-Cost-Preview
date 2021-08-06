@@ -8,6 +8,7 @@ namespace EmployerCostPreview.Data.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
+        public int EmployeeId { get; set; }
         public Employee Employee { get; set; }
     }
 }

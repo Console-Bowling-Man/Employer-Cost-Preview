@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EmployerCostPreview.Data;
 using EmployerCostPreview.Data.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EmployerCostPreview.Controllers
 {
@@ -43,6 +44,12 @@ namespace EmployerCostPreview.Controllers
         // GET: Dependents/Create
         public IActionResult Create()
         {
+            ViewData["EmployeesNamesIds"] = _context.Employees.Select(employee =>
+                new SelectListItem
+                {
+                    Text = $"{employee.FirstName} {employee.LastName}",
+                    Value = employee.EmployeeId.ToString()
+                });
             return View();
         }
 
@@ -51,7 +58,7 @@ namespace EmployerCostPreview.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DependentId,FirstName,LastName")] Dependent dependent)
+        public async Task<IActionResult> Create([Bind("DependentId,Employee,FirstName,LastName")] Dependent dependent)
         {
             if (ModelState.IsValid)
             {
@@ -75,6 +82,13 @@ namespace EmployerCostPreview.Controllers
             {
                 return NotFound();
             }
+            
+            ViewData["EmployeesNamesIds"] = _context.Employees.Select(employee =>
+                new SelectListItem
+                {
+                    Text = $"{employee.FirstName} {employee.LastName}",
+                    Value = employee.EmployeeId.ToString()
+                });
             return View(dependent);
         }
 
@@ -83,7 +97,7 @@ namespace EmployerCostPreview.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DependentId,FirstName,LastName")] Dependent dependent)
+        public async Task<IActionResult> Edit(int id, [Bind("DependentId,Employee,FirstName,LastName")] Dependent dependent)
         {
             if (id != dependent.DependentId)
             {
