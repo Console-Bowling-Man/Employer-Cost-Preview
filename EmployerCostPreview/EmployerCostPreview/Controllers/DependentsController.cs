@@ -17,12 +17,6 @@ namespace EmployerCostPreview.Controllers
             _context = context;
         }
 
-        // GET: Dependents
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Dependents.ToListAsync());
-        }
-
         // GET: Dependents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -44,13 +38,31 @@ namespace EmployerCostPreview.Controllers
         // GET: Dependents/Create
         public IActionResult Create()
         {
-            ViewData["EmployeesNamesIds"] = _context.Employees.Select(employee =>
-                new SelectListItem
-                {
-                    Text = $"{employee.FirstName} {employee.LastName}",
-                    Value = employee.EmployeeId.ToString()
-                });
+            CreateViewPrep();
             return View();
+        }
+
+        private void CreateViewPrep()
+        {
+            var employeeId = GetQueryStringEmployeeId();
+            ViewData["EmployeeId"] = employeeId;
+            ProvideEmployeesNamesIds(employeeId);
+        }
+
+        private int GetQueryStringEmployeeId() => HttpContext.Request.Query["EmployeeId"].ToList().Select(s =>
+        {
+            var success = int.TryParse(s, out var integer);
+            return new {success, integer};
+        }).FirstOrDefault(arg => arg.success)?.integer ?? 0;
+
+        private void ProvideEmployeesNamesIds(int employeeId)
+        {
+            ViewData["EmployeesNamesIds"] = _context.Employees.Select(employee => new SelectListItem
+            {
+                Text = $"{employee.FirstName} {employee.LastName}",
+                Value = employee.EmployeeId.ToString(),
+                Selected = employee.EmployeeId == employeeId
+            });
         }
 
         // POST: Dependents/Create
@@ -58,14 +70,16 @@ namespace EmployerCostPreview.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DependentId,Employee,FirstName,LastName")] Dependent dependent)
+        public async Task<IActionResult> Create([Bind("DependentId,EmployeeId,FirstName,LastName")] Dependent dependent)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(dependent);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Employees");
             }
+
+            CreateViewPrep();
             return View(dependent);
         }
 
@@ -82,13 +96,8 @@ namespace EmployerCostPreview.Controllers
             {
                 return NotFound();
             }
-            
-            ViewData["EmployeesNamesIds"] = _context.Employees.Select(employee =>
-                new SelectListItem
-                {
-                    Text = $"{employee.FirstName} {employee.LastName}",
-                    Value = employee.EmployeeId.ToString()
-                });
+
+            ProvideEmployeesNamesIds(dependent.EmployeeId);
             return View(dependent);
         }
 
@@ -97,7 +106,7 @@ namespace EmployerCostPreview.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DependentId,Employee,FirstName,LastName")] Dependent dependent)
+        public async Task<IActionResult> Edit(int id, [Bind("DependentId,EmployeeId,FirstName,LastName")] Dependent dependent)
         {
             if (id != dependent.DependentId)
             {
@@ -122,8 +131,10 @@ namespace EmployerCostPreview.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Employees");
             }
+
+            ProvideEmployeesNamesIds(dependent.EmployeeId);
             return View(dependent);
         }
 
@@ -153,7 +164,7 @@ namespace EmployerCostPreview.Controllers
             var dependent = await _context.Dependents.FindAsync(id);
             _context.Dependents.Remove(dependent);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Employees");
         }
 
         private bool DependentExists(int id)

@@ -19,7 +19,7 @@ namespace EmployerCostPreview.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            return View(await _context.Employees.Include(employee => employee.Dependents).ToListAsync());
         }
 
         // GET: Employees/Details/5

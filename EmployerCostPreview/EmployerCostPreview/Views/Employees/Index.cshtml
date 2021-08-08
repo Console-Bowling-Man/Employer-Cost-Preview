@@ -21,27 +21,48 @@
             <th>
                 @Html.DisplayNameFor(model => model.Created)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dependents)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EmployeeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Created)
+        </td>
+        <td>
+            @foreach (var dependent in item.Dependents)
+            {
+                <a asp-controller="Dependents" asp-action="Details" asp-route-id="@dependent.DependentId">
+                    @dependent.FirstName @dependent.LastName
+                </a>
+                if (dependent != item.Dependents.Last())
+                {
+                    <text>|</text>
+                }
+            }
+            @if (!item.Dependents.Any())
+            {
+                <span class="text-muted">(none)</span>
+            }
+            |
+            <a class="font-weight-bold" asp-controller="Dependents" asp-action="Create" asp-route-EmployeeId="@item.EmployeeId">Add</a>
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.EmployeeId">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
+        </td>
+    </tr>
 }
     </tbody>
 </table>
