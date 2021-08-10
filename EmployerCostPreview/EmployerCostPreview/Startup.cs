@@ -28,6 +28,7 @@ namespace EmployerCostPreview
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddScoped<IEmployeePaycheckReportCollectionGenerator, EmployeePaycheckReportCollectionGenerator>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddWebOptimizer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +45,7 @@ namespace EmployerCostPreview
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseWebOptimizer();
             app.UseStaticFiles();
 
             app.UseRouting();
