@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EmployerCostPreview.Data;
+using EmployerCostPreview.Reports;
+using EmployerCostPreview.Reports.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployerCostPreview
@@ -24,7 +26,7 @@ namespace EmployerCostPreview
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
-
+            services.AddScoped<IEmployeePaycheckReportCollectionGenerator, EmployeePaycheckReportCollectionGenerator>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 

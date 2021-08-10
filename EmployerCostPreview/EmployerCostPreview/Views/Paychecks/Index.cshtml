@@ -1,0 +1,115 @@
+﻿@model IEnumerable<EmployerCostPreview.Reports.Models.EmployeePaycheckReport>
+@{
+    ViewData["Title"] = "Calculator";
+}
+
+<h1>Estimated Paychecks</h1>
+<br />
+
+@foreach (var employeePaycheckReport in Model)
+{
+    <div class="card">
+        <div class="card-body">
+            <h4>@Html.DisplayFor(modelItem => employeePaycheckReport.EmployeeFullName)</h4>
+            <h5>@Html.DisplayNameFor(modelItem => employeePaycheckReport.AnnualEmployeeBenefitCostReportLines)</h5>
+
+            <table class="table table-bordered table-sm">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => employeePaycheckReport.AnnualEmployeeBenefitCostReportLines[0].Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => employeePaycheckReport.AnnualEmployeeBenefitCostReportLines[0].Cost)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in employeePaycheckReport.AnnualEmployeeBenefitCostReportLines)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => line.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => line.Cost)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => employeePaycheckReport.TotalAnnualBenefitsCost)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => employeePaycheckReport.TotalAnnualBenefitsCost)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => employeePaycheckReport.PaychecksPerYear)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => employeePaycheckReport.PaychecksPerYear)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => employeePaycheckReport.AmountPerPaycheckGross)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => employeePaycheckReport.AmountPerPaycheckGross)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => employeePaycheckReport.BenefitsCostPerPaycheck)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => employeePaycheckReport.BenefitsCostPerPaycheck)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => employeePaycheckReport.AmountPerPaycheckNet)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => employeePaycheckReport.AmountPerPaycheckNet)
+                </dd>
+            </dl>
+
+        </div>
+    </div>
+    <br/>
+}
+
+
+
+
+@*<table class="table table-bordered table-sm">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AnnualAnnualEmployeeBenefitCostReportLines[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AnnualAnnualEmployeeBenefitCostReportLines[0].Cost)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AnnualAnnualEmployeeBenefitCostReportLines)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cost)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.TotalAnnualBenefitsCost)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.TotalAnnualBenefitsCost)
+    </dd>
+</dl>*@
